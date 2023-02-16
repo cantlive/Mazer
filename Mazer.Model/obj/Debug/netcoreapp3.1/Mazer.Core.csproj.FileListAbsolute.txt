@@ -1,0 +1,10 @@
+D:\123\Mazer\Mazer.Model\bin\Debug\netcoreapp3.1\Mazer.Core.deps.json
+D:\123\Mazer\Mazer.Model\bin\Debug\netcoreapp3.1\Mazer.Core.dll
+D:\123\Mazer\Mazer.Model\bin\Debug\netcoreapp3.1\Mazer.Core.pdb
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.csproj.AssemblyReference.cache
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.AssemblyInfoInputs.cache
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.AssemblyInfo.cs
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.csproj.CoreCompileInputs.cache
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.dll
+D:\123\Mazer\Mazer.Model\obj\Debug\netcoreapp3.1\Mazer.Core.pdb

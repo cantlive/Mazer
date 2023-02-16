@@ -1,0 +1,13 @@
+D:\123\Mazer\Mazer.Presentation\bin\Debug\netcoreapp3.1\Mazer.Presentation.deps.json
+D:\123\Mazer\Mazer.Presentation\bin\Debug\netcoreapp3.1\Mazer.Presentation.dll
+D:\123\Mazer\Mazer.Presentation\bin\Debug\netcoreapp3.1\Mazer.Presentation.pdb
+D:\123\Mazer\Mazer.Presentation\bin\Debug\netcoreapp3.1\Mazer.Core.dll
+D:\123\Mazer\Mazer.Presentation\bin\Debug\netcoreapp3.1\Mazer.Core.pdb
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.csproj.AssemblyReference.cache
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.GeneratedMSBuildEditorConfig.editorconfig
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.AssemblyInfoInputs.cache
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.AssemblyInfo.cs
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.csproj.CoreCompileInputs.cache
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.csproj.CopyComplete
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.dll
+D:\123\Mazer\Mazer.Presentation\obj\Debug\netcoreapp3.1\Mazer.Presentation.pdb

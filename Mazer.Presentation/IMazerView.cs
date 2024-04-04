@@ -17,6 +17,8 @@ namespace Mazer.Presentation
         MazeDrawerBase MazeDrawer { get; }
         MazeGenerationAnimatorBase MazeAnimator { get; }
 
+        event EventHandler OnResizeForm;
+
         event EventHandler OnLoadForm;
 
         event EventHandler OnGenerateClick;

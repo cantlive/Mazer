@@ -7,9 +7,9 @@ namespace Mazer.Core.MazeGenerators
 {
     public sealed class RandomizedDepthFirstSearchMazeGenerator : MazeGeneratorBase
     {
-        private Random _random = new Random();
         private readonly Stack<MazeCell> _cellsStack = new Stack<MazeCell>();
         private readonly HashSet<MazeCell> _visitedCells = new HashSet<MazeCell>();
+        private Random _random = new Random();
 
         public RandomizedDepthFirstSearchMazeGenerator(Maze maze) : base(maze)
         {
@@ -20,7 +20,7 @@ namespace Mazer.Core.MazeGenerators
         public override void Refresh()
         {
             _random = new Random();
-            _maze.CopyCells(_initialMaze);
+            _maze.Reset();
 
             _visitedCells.Clear();
             _cellsStack.Clear();

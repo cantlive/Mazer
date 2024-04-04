@@ -6,7 +6,6 @@ namespace Mazer.Core.MazeGenerators
     public class MazeGeneratorBase
     {
         protected readonly Maze _maze;
-        protected readonly Maze _initialMaze;
 
         public MazeGeneratorBase(Maze maze)
         {
@@ -14,8 +13,6 @@ namespace Mazer.Core.MazeGenerators
                 throw new ArgumentNullException(nameof(maze));
 
             _maze = maze;
-            _initialMaze = new Maze(maze.Width, maze.Height, maze.RowsCount, maze.ColumnsCount);
-            _initialMaze.CopyCells(maze);
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ namespace Mazer.Presentation
             _mazerView.OnLoadForm += OnLoad;
             _mazerView.OnGenerateClick += OnGenerateClick;
             _mazerView.OnAnimateClick += OnAnimateClick;
+            _mazerView.OnResizeForm += OnResizeForm;
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -37,6 +38,7 @@ namespace Mazer.Presentation
         private void OnGenerateClick(object sender, EventArgs e)
         {
             MazeGeneratorBase mazeGenerator = _mazerView.GetSelectedMazeGenerator();
+            ChangeMazeSize(mazeGenerator);
             mazeGenerator?.Refresh();
             mazeGenerator?.Generate();
             _mazerView.MazeDrawer.Draw(_mazerModel.Maze);
@@ -44,7 +46,21 @@ namespace Mazer.Presentation
 
         private void OnAnimateClick(object sender, EventArgs e)
         {
-            _mazerView.MazeAnimator.Animate(_mazerModel.Maze, _mazerView.GetSelectedMazeGenerator());
+            MazeGeneratorBase mazeGenerator = _mazerView.GetSelectedMazeGenerator();
+            ChangeMazeSize(mazeGenerator);
+            mazeGenerator?.Refresh();
+            _mazerView.MazeAnimator.Animate(_mazerModel.Maze, mazeGenerator);
+        }
+
+        private void ChangeMazeSize(MazeGeneratorBase mazeGenerator) 
+        {
+            _mazerModel.ChangeMazeSize(_mazerView.RowsCount, _mazerView.ColumnsCount);
+        }
+
+        private void OnResizeForm(object sender, EventArgs e)
+        {
+            _mazerModel.SetCellsSize(_mazerView.MazeWidth, _mazerView.MazeHeight);
+            _mazerView.MazeDrawer.Draw(_mazerModel.Maze);
         }
     }
 }

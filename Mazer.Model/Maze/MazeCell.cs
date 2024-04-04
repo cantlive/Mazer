@@ -5,14 +5,17 @@ using System.Linq;
 namespace Mazer.Core.MazeModel
 {
     public sealed class MazeCell
-    {
+    {        
         private readonly Dictionary<BorderType, bool> _borders;
+        private int _x;
+        private int _y;
+        private int _size;
 
         public MazeCell(int x, int y, int size)
         {
-            X = x;
-            Y = y;
-            Size = size;
+            _x = x;
+            _y = y;
+            _size = size;
 
             _borders = new Dictionary<BorderType, bool>()
             {
@@ -28,11 +31,65 @@ namespace Mazer.Core.MazeModel
             _borders = new Dictionary<BorderType, bool>(borders);
         }
 
-        public int X { get; private set; }
+        /// <summary>
+        /// Get cell X position
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        public int X
+        {
+            get
+            {
+                return _x;
+            }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(X));
+                _x = value;
+            }
+        }
 
-        public int Y { get; private set; }
+        /// <summary>
+        /// Get cell Y position
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        public int Y
+        {
+            get
+            {
+                return _y;
+            }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(Y));
+                _y = value;
+            }
+        }
 
-        public int Size { get; private set; }
+        /// <summary>
+        /// Get cell size
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        public int Size 
+        {
+            get 
+            {
+                return _size;
+            }
+            set 
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(Size));
+                _size = value;
+            }
+        }
+
+        public bool Visited { get; set; }
+        public bool Left => _borders[BorderType.Left];
+        public bool Top => _borders[BorderType.Top];
+        public bool Right => _borders[BorderType.Right];
+        public bool Bottom => _borders[BorderType.Bottom];
 
         public bool Current { get; set; }
 

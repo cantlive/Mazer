@@ -7,33 +7,87 @@ namespace Mazer.Core.MazeModel
 {
     public sealed class Maze : IEnumerable<MazeCell>
     {
-        private readonly MazeCell[,] _cells;
-        private readonly Dictionary<MazeCellIndex, List<MazeCell>> _cellsNeighbours;
+        private int _width, _height, _rowsCount, _columnsCount;
+        private MazeCell[,] _initialCells;
+        private MazeCell[,] _cells;
+        private Dictionary<MazeCellIndex, List<MazeCell>> _cellsNeighbours;
 
         public Maze(int width, int height, int rowsCount, int columnsCount)
         {
             Width = width;
             Height = height;
-            RowsCount = rowsCount;
-            ColumnsCount = columnsCount;
-
-            int cellWidth = width / columnsCount;
-            int cellHeight = height / rowsCount;
-            int cellSize = Math.Min(cellWidth, cellHeight);
-
-            _cells = new MazeCell[rowsCount, columnsCount];
-            _cellsNeighbours = new Dictionary<MazeCellIndex, List<MazeCell>>();
-
-            InitCells(rowsCount, columnsCount, cellSize);
-            FillCellsNeighbours();
+            InitCells(rowsCount, columnsCount);
         }
 
-        public int Width { get; }
-        public int Height { get; }
-        public int RowsCount { get; }
-        public int ColumnsCount { get; }
+        #region Properties
 
         public bool IsGenerated => _cells[0, 0].Borders.Count() < 4;
+
+        /// <summary>
+        /// Number of rows in maze
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        public int RowsCount
+        {
+            get { return _rowsCount; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(RowsCount));
+
+                _rowsCount = value;
+            }
+        }
+
+        /// <summary>
+        /// Number of columns in maze
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        public int ColumnsCount
+        {
+            get { return _columnsCount; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(ColumnsCount));
+
+                _columnsCount = value;
+            }
+        }
+
+        /// <summary>
+        /// Maze width
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        private int Width 
+        {   
+            get { return _width; } 
+            set 
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(Width));
+
+                _width = value;
+            }
+        }
+
+        /// <summary>
+        /// Maze height
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// </summary>
+        private int Height
+        {
+            get { return _height; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(Height));
+
+                _height = value;
+            }
+        }
+
+        #endregion Properties
 
         /// <summary>
         /// Get <see cref="MazeCell"/> by row index and column index
@@ -72,16 +126,39 @@ namespace Mazer.Core.MazeModel
         }
 
         /// <summary>
-        /// Copy all cells from <paramref name="sourceMaze"/>
+        /// Set number of rows and columns of maze
         /// </summary>
-        /// <param name="sourceMaze">Source <see cref="Maze"/></param>
-        public void CopyCells(Maze sourceMaze)
+        /// <param name="rowsCount">Number of rows</param>
+        /// <param name="columnsCount">Number of columns</param>
+        public void SetMazeSize(int rowsCount, int columnsCount) 
         {
-            for (int i = 0; i < sourceMaze.RowsCount; i++)
+            InitCells(rowsCount, columnsCount);
+        }
+
+        /// <summary>
+        /// Set size of cells
+        /// </summary>
+        /// <param name="width">Maze width</param>
+        /// <param name="height">Maze height</param>
+        public void SetCellsSize(int width, int height) 
+        {
+            Width = width;
+            Height = height;
+
+            int cellSize = GetCellSize();
+            SetCellsSize(cellSize);
+        }
+
+        /// <summary>
+        /// Set all cells with all borders
+        /// </summary>
+        public void Reset() 
+        {
+            for (int i = 0; i < RowsCount; i++)
             {
-                for (int j = 0; j < sourceMaze.ColumnsCount; j++)
+                for (int j = 0; j < ColumnsCount; j++)
                 {
-                    sourceMaze[i, j].Copy(_cells[i, j]);
+                    _initialCells[i, j].Copy(_cells[i, j]);
                 }
             }
         }
@@ -96,6 +173,16 @@ namespace Mazer.Core.MazeModel
             MazeCellIndex index = GetCellIndex(cell);
 
             return GetCellNeighbours(index.X, index.Y);
+        }
+
+        /// <summary>
+        /// Get index of <paramref name="cell"/>
+        /// </summary>
+        /// <param name="cell">Cell</param>
+        /// <returns>Index of <paramref name="cell"/></returns>
+        public MazeCellIndex GetCellIndex(MazeCell cell)
+        {
+            return new MazeCellIndex(cell.Y / cell.Size, cell.X / cell.Size);
         }
 
         /// <summary>
@@ -143,22 +230,48 @@ namespace Mazer.Core.MazeModel
             }
         }
 
-        private void CheckBorders(int i, int j)
+        private void InitCells(int rowsCount, int columnsCount)
         {
-            if (i < 0 || i >= _cells.GetLength(0))
-                throw new ArgumentOutOfRangeException($"{i} is out of range", nameof(i));
+            RowsCount = rowsCount;
+            ColumnsCount = columnsCount;
+            int cellSize = GetCellSize();
 
-            if (j < 0 || j > _cells.GetLength(1))
-                throw new ArgumentOutOfRangeException($"{j} is out of range", nameof(j));
+            _initialCells = new MazeCell[rowsCount, columnsCount];
+            _cells = new MazeCell[rowsCount, columnsCount];
+            _cellsNeighbours = new Dictionary<MazeCellIndex, List<MazeCell>>();
+
+            InitCells(rowsCount, columnsCount, cellSize);
+            FillCellsNeighbours();
         }
 
-        private void InitCells(int rowCount, int columnCount, int cellSize)
+        private int GetCellSize() 
         {
-            for (int i = 0; i < rowCount; i++)
+            int cellWidth = Width / ColumnsCount;
+            int cellHeight = Height / RowsCount;
+            return Math.Min(cellWidth, cellHeight);
+        }
+
+        private void InitCells(int rowsCount, int columnsCount, int cellSize)
+        {
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < columnCount; j++)
+                for (int j = 0; j < columnsCount; j++)
                 {
+                    _initialCells[i, j] = new MazeCell(j * cellSize, i * cellSize, cellSize);
                     _cells[i, j] = new MazeCell(j * cellSize, i * cellSize, cellSize);
+                }
+            }
+        }
+
+        private void SetCellsSize(int cellSize) 
+        {
+            for (int i = 0; i < RowsCount; i++)
+            {
+                for (int j = 0; j < ColumnsCount; j++)
+                {
+                    _initialCells[i, j].Size = _cells[i, j].Size = cellSize;
+                    _initialCells[i, j].X = _cells[i, j].X = j * cellSize;
+                    _initialCells[i, j].Y = _cells[i, j].Y = i * cellSize;
                 }
             }
         }
@@ -174,6 +287,15 @@ namespace Mazer.Core.MazeModel
                     _cellsNeighbours.Add(new MazeCellIndex(i, j), GetCellNeighboursWithoutCash(i, j));
                 }
             }
+        }
+
+        private void CheckBorders(int i, int j)
+        {
+            if (i < 0 || i >= _cells.GetLength(0))
+                throw new ArgumentOutOfRangeException($"{i} is out of range", nameof(i));
+
+            if (j < 0 || j > _cells.GetLength(1))
+                throw new ArgumentOutOfRangeException($"{j} is out of range", nameof(j));
         }
 
         /// <summary>
@@ -204,12 +326,7 @@ namespace Mazer.Core.MazeModel
             return result;
         }
 
-        private MazeCellIndex GetCellIndex(MazeCell cell)
-        {
-            return new MazeCellIndex(cell.Y / cell.Size, cell.X / cell.Size);
-        }
-
-        private struct MazeCellIndex : IEquatable<MazeCellIndex>
+        public struct MazeCellIndex : IEquatable<MazeCellIndex>
         {
             public int X { get; }
             public int Y { get; }
